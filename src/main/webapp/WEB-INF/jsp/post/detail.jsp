@@ -15,17 +15,22 @@
 		<c:import url="/WEB-INF/jsp/include/header.jsp" />
 		<section class="contents d-flex justify-content-center">
 			<div class="post-box my-5">
-				<h2 class="text-center">메모 입력</h2>
+				<h2 class="text-center">메모 보기</h2>
 				<div class="d-flex">
 					<label class="col-1">제목 </label>
-					<input type="text" class="form-control" id="titleInput">
+					<input type="text" class="form-control" id="titleInput" value="${post.title }">
 				</div>
 				
-				<textarea class="form-control mt-3" rows="7" id="contentsInput"></textarea>
-				<input type="file" class="mt-3" id="fileInput">
+				<textarea class="form-control mt-3" rows="7" id="contentsInput">${post.contents }</textarea>
+				
+				<img src="${post.imagePath }">
+				
 				<div class="d-flex justify-content-between mt-3">
-					<a href="/post/list-view" class="btn btn-secondary">목록</a>
-					<button type="button" class="btn btn-secondary" id="saveBtn">저장</button>
+					<div>
+						<a href="/post/list-view" class="btn btn-secondary">목록</a>
+						<button type="button" class="btn btn-danger">삭제</button>
+					</div>
+					<button type="button" class="btn btn-secondary" id="saveBtn">수정</button>
 				</div>
 			</div>
 		</section>
@@ -35,50 +40,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
-<script>
-	$(document).ready(function() {
-		$("#saveBtn").on("click", function() {
-			let title = $("#titleInput").val();
-			let contents = $("#contentsInput").val();
-			let file = $("#fileInput")[0].files[0];
-			
-			if(title == "") {
-				alert("제목을 입력하세요");
-				return ;
-			}
-			
-			if(contents == "") {
-				alert("내용을 입력하세요");
-				return ;
-			}
-			
-			let formData = new FormData();
-			formData.append("title", title);
-			formData.append("contents", contents);
-			formData.append("imageFile", file);
-			
-			$.ajax({
-				type:"post"
-				, url:"/post/create"
-				, data:formData
-				, enctype:"multipart/form-data"  // 파일 업로드 필수 옵션
-				, processData:false				// 파일 업로드 필수 옵션
-				, contentType:false				// 파일 업로드 필수 옵션
-				, success:function(data) {
-					if(data.result == "success") {
-						location.href = "/post/list-view";
-					} else {
-						alert("메모작성 실패");
-					}
-				}
-				, error:function() {
-					alert("메모 작성 에러");
-				}
-			});
-			
-		});
-	});
-</script>
+
 
 </body>
 </html>
